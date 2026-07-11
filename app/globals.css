@@ -1,0 +1,175 @@
+@import url("https://api.fontshare.com/v2/css?f[]=gambetta@400,500&f[]=switzer@300,400,500&display=swap");
+@import "tailwindcss";
+
+/* ————————————————————————————————————————————————
+   HAVN — design tokens
+   Warm white, soft sand, muted sage, deep charcoal.
+   Minimalism creates the luxury; typography is the
+   hero; every surface stays quiet.
+———————————————————————————————————————————————— */
+:root {
+  --paper: #ffffff; /* pure white — the page, Apple-clean */
+  --sand: #f5f5f7; /* soft neutral gray — alternate surfaces */
+  --sage: #a8b29a; /* muted sage — the single accent */
+  --ink: #1c1c1c; /* deep charcoal — primary text */
+  --gray: #6e6e73; /* neutral gray — secondary text */
+  --oak: #d2d2d7; /* neutral hairline details */
+
+  --serif: "Gambetta", "Georgia", ui-serif, serif;
+  --sans: "Switzer", "Helvetica Neue", ui-sans-serif, system-ui, sans-serif;
+
+  --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-sand: var(--sand);
+  --color-sage: var(--sage);
+  --color-ink: var(--ink);
+  --color-gray: var(--gray);
+  --color-oak: var(--oak);
+  --font-serif: var(--serif);
+  --font-sans: var(--sans);
+}
+
+html {
+  background: var(--paper);
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--sage);
+  color: var(--paper);
+}
+
+:focus-visible {
+  outline: 1.5px solid var(--ink);
+  outline-offset: 4px;
+}
+
+/* ————— Editorial type scale ————— */
+/* Massive serif display — the voice of the site. */
+.type-hero {
+  font-family: var(--serif);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  font-size: clamp(3rem, 9.5vw, 9rem);
+}
+.type-chapter {
+  font-family: var(--serif);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  font-size: clamp(2.2rem, 5.4vw, 4.75rem);
+}
+.type-title {
+  font-family: var(--serif);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  font-size: clamp(1.6rem, 3vw, 2.6rem);
+}
+.type-quote {
+  font-family: var(--serif);
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  font-size: clamp(1.5rem, 3.4vw, 2.9rem);
+}
+
+/* Small caps kicker — quiet, wide, never shouts. */
+.kicker {
+  font-family: var(--sans);
+  font-weight: 400;
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+
+/* Body measure — never wider than comfortable reading. */
+.measure {
+  max-width: 34em;
+  line-height: 1.85;
+}
+
+/* ————— Link: underline grows from center ————— */
+.link-center {
+  position: relative;
+  display: inline-block;
+}
+.link-center::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: translateX(-50%) scaleX(0);
+  transition: transform 0.6s var(--ease);
+}
+.link-center:hover::after,
+.link-center:focus-visible::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+/* ————— Image treatment ————— */
+/* Every photograph breathes: soft ease, slow zoom on hover. */
+.img-zoom img {
+  transition: transform 1.4s var(--ease-soft);
+  will-change: transform;
+}
+.img-zoom:hover img {
+  transform: scale(1.035);
+}
+
+/* ————— Text line reveal (SplitLines targets) ————— */
+.line-mask {
+  display: block;
+  overflow: hidden;
+}
+.line-inner {
+  display: block;
+  transform: translateY(110%);
+  will-change: transform;
+}
+
+/* ————— Horizontal rules — oak hairlines ————— */
+.rule {
+  border-top: 1px solid color-mix(in srgb, var(--oak) 38%, transparent);
+}
+
+/* ————— Reduced motion: the page simply exists ————— */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .line-inner {
+    transform: none;
+  }
+}

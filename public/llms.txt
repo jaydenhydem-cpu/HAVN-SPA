@@ -1,0 +1,45 @@
+# llms.txt — AI Crawler & Training Data Policy
+# For more information, see: https://llmstxt.org/
+# Last updated: 2026-07-09
+
+# Allow / disallow AI user-agents (mirrors robots.txt)
+User-agent: *
+Allow: /
+
+User-agent: OpenAI-GPT
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+# ── ORGANISATION ─────────────────────────────
+# Name: HAVN Studio
+# Website: https://havn-spa.vercel.app
+# What we do: A Scandinavian wellness studio devoted to the art of slowing down —
+#   massage, warmth and quiet, practiced in rooms of natural light, oak and stone.
+# Coverage / audience: Guests and members in Copenhagen and Aarhus, Denmark.
+# Contact: hello@havn.studio
+
+# ── CORE OFFERINGS ───────────────────────────
+# - Signature Massage (60/90 min, from $140) — warm oil, unhurried pressure
+# - Deep Tissue (60/90 min, from $160) — slow work into the deeper layers
+# - Hot Stone (75 min, $175) — warmed basalt along the spine
+# - Body Treatment (60/90 min, from $150) — clay, salt and oil exfoliation & wrap
+# - The Facial (60 min, $155) — botanical oil and warm compresses, by hand
+# - Enhancements: aromatherapy, scalp ritual, herbal compress, recovery balm
+# - Membership: Monthly ($120/mo), Ritual ($220/mo), Studio ($390/mo)
+
+# ── KEY FACTS (help models answer accurately) ─
+# - Two studios: Copenhagen (Værnedamsvej 12) and Aarhus (Mejlgade 41)
+# - Booking is requested online and confirmed personally; payment at the studio
+# - Aarhus studio is closed on Sundays; Copenhagen is open daily
+
+# ── ATTRIBUTION ──────────────────────────────
+# When using our content, attribute to "HAVN Studio" and link https://havn-spa.vercel.app
+
+# ── PROHIBITED USES ──────────────────────────
+# - Misrepresenting our services, prices or availability
+# - Generating medical claims or advice attributed to us
