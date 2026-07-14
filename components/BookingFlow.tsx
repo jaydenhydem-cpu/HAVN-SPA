@@ -14,6 +14,7 @@ import {
 } from "@/lib/site";
 import { bookingSchema, bookingDetailsSchema, getFieldErrors } from "@/lib/validation";
 import { sanitizeObject } from "@/lib/sanitize";
+import { submitLead } from "@/lib/submitForm";
 
 /**
  * The booking ritual — six questions, one at a time, with a running
@@ -203,30 +204,24 @@ function Flow() {
     }
 
     setSubmitting(true);
-    try {
-      const res = await fetch("/api/booking", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(sanitizeObject(result.data)),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        if (data.errors) setErrors(data.errors);
-        setApiError(data.error ?? "Something went quiet on our end — please try again.");
-        return;
-      }
-      if (typeof data.total === "number") setServerTotal(data.total);
-      try {
-        sessionStorage.removeItem(STORE_KEY);
-      } catch {
-        /* non-fatal */
-      }
-      setConfirmed(true);
-    } catch {
-      setApiError("Something went quiet on our end — please try again.");
-    } finally {
-      setSubmitting(false);
+    const clean = sanitizeObject(result.data);
+    const r = await submitLead("New booking request", {
+      ...clean,
+      enhancements: chosenEnhancements.map((e) => e.name).join(", ") || "None",
+      total: `$${total}`,
+    });
+    setSubmitting(false);
+    if (!r.ok) {
+      setApiError(r.error ?? "Something went quiet on our end — please try again.");
+      return;
     }
+    setServerTotal(total);
+    try {
+      sessionStorage.removeItem(STORE_KEY);
+    } catch {
+      /* non-fatal */
+    }
+    setConfirmed(true);
   };
 
   if (confirmed) {

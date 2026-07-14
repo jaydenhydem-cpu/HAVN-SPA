@@ -11,10 +11,22 @@ export const SITE = {
   /** GA4 measurement id (e.g. "G-XXXXXXXXXX"). Empty = analytics fully
    *  disabled — no script loads at all. Set per client. */
   analyticsId: "",
-  /** Form delivery endpoint (e.g. a Formspree URL). Empty = log-only:
-   *  submissions validate, sanitize and return success without emailing
-   *  anyone. Set per client to deliver bookings + newsletter signups. */
-  formEndpoint: "",
+  /** ── Form delivery ──────────────────────────────────────────────
+   *  ONE reusable endpoint delivers every form — bookings, enquiries,
+   *  newsletter and membership. No custom backend needed. Two zero-cost
+   *  options, either drops straight into these two fields:
+   *
+   *  • Web3Forms (no account — fastest): get a key at https://web3forms.com
+   *      formEndpoint  = "https://api.web3forms.com/submit"
+   *      formAccessKey = "<your access key>"
+   *  • Formspree (free account): create a form at https://formspree.io
+   *      formEndpoint  = "https://formspree.io/f/<your-id>"
+   *      formAccessKey = ""   (not used)
+   *
+   *  Leave formEndpoint empty = log-only: forms validate and confirm to
+   *  the visitor but email no one (safe demo default). */
+  formEndpoint: "https://api.web3forms.com/submit",
+  formAccessKey: "ee4c07b2-76b2-4aaa-88e7-ca48ec1f3599",
   email: "hello@havn.studio",
   instagram: "https://instagram.com",
   copyright: `© ${new Date().getFullYear()} HAVN Studio`,

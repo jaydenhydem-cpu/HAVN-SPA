@@ -12,7 +12,7 @@ const isDev = process.env.NODE_ENV === "development";
 const csp = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://*.googletagmanager.com`,
-  "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://vitals.vercel-insights.com",
+  "connect-src 'self' https://api.web3forms.com https://formspree.io https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://vitals.vercel-insights.com",
   "img-src 'self' data: blob: https://*.google-analytics.com https://*.googletagmanager.com",
   "style-src 'self' 'unsafe-inline' https://api.fontshare.com",
   "font-src 'self' data: https://cdn.fontshare.com",

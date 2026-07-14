@@ -5,6 +5,7 @@ import Link from "next/link";
 import { SITE, LOCATIONS } from "@/lib/site";
 import { newsletterSchema } from "@/lib/validation";
 import { sanitizeEmail } from "@/lib/sanitize";
+import { submitLead } from "@/lib/submitForm";
 
 /**
  * Extremely minimal footer: one serif farewell, a quiet newsletter
@@ -25,23 +26,13 @@ export default function Footer() {
       return;
     }
     setPending(true);
-    try {
-      const res = await fetch("/api/newsletter", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: sanitizeEmail(result.data.email) }),
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        setError(data.error ?? "Something went quiet — please try again.");
-        return;
-      }
-      setDone(true);
-    } catch {
-      setError("Something went quiet — please try again.");
-    } finally {
-      setPending(false);
+    const r = await submitLead("Newsletter signup", { email: sanitizeEmail(result.data.email) });
+    setPending(false);
+    if (!r.ok) {
+      setError(r.error ?? "Something went quiet — please try again.");
+      return;
     }
+    setDone(true);
   };
 
   return (

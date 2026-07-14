@@ -5,6 +5,7 @@ import Gallery from "@/components/sections/Gallery";
 import Ingredients from "@/components/sections/Ingredients";
 import MembershipSection from "@/components/sections/MembershipSection";
 import LocationSection from "@/components/sections/LocationSection";
+import Enquiry from "@/components/sections/Enquiry";
 import Testimonials from "@/components/sections/Testimonials";
 import BookingCTA from "@/components/sections/BookingCTA";
 import { SITE, LOCATIONS, TREATMENTS, fromPrice } from "@/lib/site";
@@ -69,6 +70,7 @@ export default function Home() {
       <Ingredients />
       <MembershipSection />
       <LocationSection />
+      <Enquiry />
       <Testimonials />
       <BookingCTA />
     </>

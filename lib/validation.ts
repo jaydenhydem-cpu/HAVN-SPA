@@ -99,6 +99,21 @@ export const newsletterSchema = z.object({
 
 export type NewsletterData = z.infer<typeof newsletterSchema>;
 
+/** General enquiry / lead capture — name, email and a short message. */
+const messageSchema = z
+  .string()
+  .trim()
+  .min(5, "A few more words, please")
+  .max(2000, "Please keep it under 2000 characters");
+
+export const enquirySchema = z.object({
+  name: nameSchema,
+  email: emailSchema,
+  message: messageSchema,
+});
+
+export type EnquiryData = z.infer<typeof enquirySchema>;
+
 /** First error message, for single-line feedback. */
 export const getFirstError = (error: z.ZodError): string =>
   error.issues[0]?.message || "Validation failed";
