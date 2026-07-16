@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -146,6 +147,15 @@ function Flow() {
     }
   }, [step, sel, hydrated, confirmed]);
 
+  // On confirmation, bring the "Request received" screen to the top so it isn't
+  // hidden under the sticky nav after submitting from a lower step.
+  useEffect(() => {
+    if (!confirmed) return;
+    const lenis = (window as unknown as { __lenis?: { scrollTo: (t: number) => void } }).__lenis;
+    if (lenis) lenis.scrollTo(0);
+    else window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [confirmed]);
+
   const treatment: Treatment | undefined = TREATMENTS.find((t) => t.slug === sel.treatment);
   const duration = treatment?.durations.find((d) => d.minutes === sel.minutes);
   const studio = LOCATIONS.find((l) => l.city === sel.studio);
@@ -225,20 +235,52 @@ function Flow() {
   };
 
   if (confirmed) {
+    const first = sel.name.split(" ")[0] || "there";
+    const rows: [string, string][] = [
+      ["Treatment", treatment?.name ?? "—"],
+      ["Length", sel.minutes ? `${sel.minutes} minutes` : "—"],
+      ...(chosenEnhancements.length
+        ? ([["Added", chosenEnhancements.map((e) => e.name).join(", ")]] as [string, string][])
+        : []),
+      ["Studio", sel.studio ?? "—"],
+      ["Date", sel.date || "—"],
+      ["Time", sel.time ?? "—"],
+      ["Guest", `${sel.name} · ${sel.email}`],
+    ];
     return (
-      <motion.div {...stepMotion} className="rule max-w-2xl pt-12">
-        <h2 className="type-title">Thank you, {sel.name.split(" ")[0]}.</h2>
-        <p className="measure mt-6 text-[0.95rem] text-gray">
-          Your {treatment?.name.toLowerCase()} ({sel.minutes} minutes
-          {chosenEnhancements.length > 0 &&
-            `, with ${chosenEnhancements.map((e) => e.name.toLowerCase()).join(" and ")}`}
-          ) is requested for {sel.date} at {sel.time} in {sel.studio}. We will write to{" "}
-          {sel.email} within the hour to confirm.
-        </p>
-        <p className="mt-8 font-serif text-3xl">
-          ${serverTotal ?? total}
-          <span className="ml-3 align-middle font-sans text-sm text-gray">settled at the studio</span>
-        </p>
+      <motion.div {...stepMotion} className="max-w-2xl">
+        <div className="rule pt-12">
+          <p className="kicker text-sage">Request received</p>
+          <h2 className="type-title mt-6">Thank you, {first}.</h2>
+          <p className="measure mt-6 text-[0.95rem] text-gray">
+            Your request is with the studio. We&rsquo;ll confirm by email at{" "}
+            <span className="text-ink">{sel.email}</span> within the hour — nothing is
+            charged online, your visit is settled at the studio.
+          </p>
+        </div>
+
+        <dl className="mt-10">
+          {rows.map(([k, v]) => (
+            <div key={k} className="rule flex items-baseline justify-between gap-6 py-4">
+              <dt className="kicker shrink-0 text-gray">{k}</dt>
+              <dd className="text-right text-[0.95rem] text-ink">{v}</dd>
+            </div>
+          ))}
+          <div className="rule flex items-baseline justify-between py-5">
+            <dt className="kicker text-gray">Total</dt>
+            <dd className="font-serif text-2xl">
+              ${serverTotal ?? total}
+              <span className="ml-2 font-sans text-xs text-gray">at the studio</span>
+            </dd>
+          </div>
+        </dl>
+
+        <Link
+          href="/"
+          className="mt-10 inline-flex text-[0.8rem] tracking-[0.06em] text-gray link-center"
+        >
+          ← Back to HAVN
+        </Link>
       </motion.div>
     );
   }

@@ -60,12 +60,20 @@ export default function Enquiry() {
           <div>
             {done ? (
               <div className="rule pt-10">
-                <p className="font-serif text-[1.7rem] leading-snug">
-                  Thank you — your note is with us.
+                <p className="kicker text-sage">Message received</p>
+                <p className="mt-4 font-serif text-[1.7rem] leading-snug">
+                  Thank you{name.trim() ? `, ${name.trim().split(" ")[0]}` : ""}.
                 </p>
                 <p className="mt-4 text-sm text-gray">
-                  We reply within a day, usually sooner.
+                  Your note is with us — we&rsquo;ll reply to{" "}
+                  <span className="text-ink">{email}</span> within a day, usually
+                  sooner.
                 </p>
+                {message.trim() && (
+                  <p className="mt-6 border-l border-ink/15 pl-4 text-sm italic text-ink/70">
+                    &ldquo;{message.trim()}&rdquo;
+                  </p>
+                )}
               </div>
             ) : (
               <form onSubmit={submit} className="flex flex-col gap-8" noValidate>
