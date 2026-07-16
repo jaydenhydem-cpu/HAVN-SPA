@@ -1,8 +1,14 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import Image from "next/image";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
+
+// Cleanup for a GSAP pin must run *synchronously* before React removes the DOM,
+// or the pin-spacer wrapper leaves a reparented node and React throws
+// "removeChild: node is not a child" on route change. useLayoutEffect fires its
+// cleanup in the mutation phase (before deletion); useEffect fires too late.
+const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 const FRAMES = [
   { src: "/images/space-sauna.jpg", caption: "The warm room — birch, cedar and quiet light" },
@@ -21,7 +27,7 @@ export default function Gallery() {
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const section = sectionRef.current;
     const track = trackRef.current;
     if (!section || !track || prefersReducedMotion()) return;
