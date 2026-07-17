@@ -134,6 +134,11 @@ function Flow() {
     if (pre && TREATMENTS.some((t) => t.slug === pre)) {
       setSel((s) => (s.treatment === pre ? s : { ...s, treatment: pre, minutes: null }));
     }
+    const preLoc = params.get("location");
+    if (preLoc) {
+      const match = LOCATIONS.find((l) => l.city.toLowerCase() === preLoc.toLowerCase());
+      if (match) setSel((s) => (s.studio === match.city ? s : { ...s, studio: match.city }));
+    }
     setHydrated(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

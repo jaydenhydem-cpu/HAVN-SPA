@@ -114,6 +114,10 @@ export default function Footer() {
           <span>{SITE.copyright}</span>
           <span>{SITE.tagline}.</span>
         </div>
+        <p className="mt-4 text-xs text-gray/70">
+          Demonstration template — the studio, names, testimonials, addresses and prices shown
+          are fictional and for preview only.
+        </p>
       </div>
     </footer>
   );

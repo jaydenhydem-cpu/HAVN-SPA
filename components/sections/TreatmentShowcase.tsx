@@ -42,6 +42,9 @@ export default function TreatmentShowcase() {
                     {durationLabel(t)} — from ${fromPrice(t)}
                   </p>
                   <p className="measure mt-8 text-[0.95rem] text-gray">{t.description}</p>
+                  <p className="mt-6 text-sm text-gray">
+                    <span className="kicker text-gray/80">Suited to</span> {t.suitedFor}
+                  </p>
                   <div className="mt-10">
                     <Button href={`/book?treatment=${t.slug}`} variant="ghost">
                       Book {t.name}

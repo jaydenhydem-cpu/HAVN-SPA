@@ -40,6 +40,8 @@ export type Treatment = {
   /** offered lengths with their prices — drives the booking total */
   durations: Duration[];
   description: string;
+  /** who the treatment is a good fit for — supports the booking decision */
+  suitedFor: string;
   image: string;
   /** next/image object-position override for art direction */
   position?: string;
@@ -55,6 +57,7 @@ export const TREATMENTS: Treatment[] = [
     ],
     description:
       "Warm oil, unhurried hands, and pressure that listens. Our founding treatment is composed around the breath — one long exhale, sixty minutes wide.",
+    suitedFor: "First-time guests, everyday stress, and anyone easing into massage.",
     image: "/images/treatment-signature.jpg",
   },
   {
@@ -66,6 +69,7 @@ export const TREATMENTS: Treatment[] = [
     ],
     description:
       "Slow, deliberate work into the deeper layers. Not force — patience, applied precisely where the week has settled.",
+    suitedFor: "Athletes, desk-bound shoulders, and long-held tension.",
     image: "/images/treatment-deep.jpg",
   },
   {
@@ -74,6 +78,7 @@ export const TREATMENTS: Treatment[] = [
     durations: [{ minutes: 75, price: 175 }],
     description:
       "Basalt warmed in water, drawn along the spine at the pace of a resting heartbeat. Heat that stays with you into the evening.",
+    suitedFor: "Deep fatigue, cold hands, and slow winter evenings.",
     image: "/images/treatment-stone.jpg",
   },
   {
@@ -85,6 +90,7 @@ export const TREATMENTS: Treatment[] = [
     ],
     description:
       "Clay, salt and oil for the whole body — an exfoliation and wrap that leaves the skin quiet, soft and warm.",
+    suitedFor: "Dull or dry skin, and a glow before an occasion.",
     image: "/images/treatment-body.jpg",
   },
   {
@@ -93,6 +99,7 @@ export const TREATMENTS: Treatment[] = [
     durations: [{ minutes: 60, price: 155 }],
     description:
       "Cleansing, warm compresses and botanical oil, worked in by hand. No machines, no fuss — only care and time.",
+    suitedFor: "Sensitive skin and anyone who prefers hands over machines.",
     image: "/images/treatment-facial.jpg",
   },
 ];
@@ -161,6 +168,7 @@ export const LOCATIONS = [
     phone: "+45 31 00 00 00",
     email: "cph@havn.studio",
     maps: "https://maps.google.com/?q=V%C3%A6rnedamsvej+12+K%C3%B8benhavn",
+    parking: "Paid street parking on Værnedamsvej; Q-Park Vesterport garage 3 min away.",
     /** weekdays the studio is dark (0 = Sunday … 6 = Saturday) */
     closedDays: [] as number[],
   },
@@ -171,6 +179,7 @@ export const LOCATIONS = [
     phone: "+45 32 00 00 00",
     email: "aarhus@havn.studio",
     maps: "https://maps.google.com/?q=Mejlgade+41+Aarhus",
+    parking: "Free two-hour street parking; Salling car park 5 min on foot.",
     closedDays: [0] as number[],
   },
 ];
@@ -192,22 +201,22 @@ export const TESTIMONIALS = [
   {
     quote:
       "It is the only hour of my week where nothing is asked of me. I leave lighter every single time.",
-    name: "Clara Meyer",
-    role: "Member since 2023",
+    name: "Clara M.",
+    role: "Signature Massage · Member since 2023",
     portrait: "/images/portrait-1.jpg",
   },
   {
     quote:
       "The room is warm, the hands are certain, and the silence is complete. HAVN understands rest as a craft.",
-    name: "Jonas Lind",
-    role: "Member since 2022",
+    name: "Jonas L.",
+    role: "Deep Tissue · Member since 2022",
     portrait: "/images/portrait-2.jpg",
   },
   {
     quote:
       "I have been to spas on three continents. None of them made calm feel this effortless.",
-    name: "Amalie Sørensen",
-    role: "Guest, Copenhagen",
+    name: "Amalie S.",
+    role: "Hot Stone · Guest, Copenhagen",
     portrait: "/images/portrait-3.jpg",
   },
 ];
