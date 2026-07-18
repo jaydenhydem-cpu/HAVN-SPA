@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { gsap, prefersReducedMotion, EASE, EASE_INOUT } from "@/lib/gsap";
 import Button from "@/components/ui/Button";
-import { SITE } from "@/lib/site";
+import { SITE, LOCATIONS } from "@/lib/site";
 
 /**
  * Chapter 0 — Arrival.
@@ -104,7 +104,7 @@ export default function Hero() {
             </div>
           </div>
           <p data-hero-fade className="kicker mt-5 flex justify-between">
-            <span>Copenhagen — Aarhus</span>
+            <span>{LOCATIONS.map((l) => l.city).join(" — ")}</span>
             <span>Est. 2019</span>
           </p>
         </div>

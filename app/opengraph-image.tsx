@@ -42,7 +42,7 @@ export default function OpengraphImage() {
           }}
         >
           <span>Massage · Warmth · Quiet</span>
-          <span>Copenhagen — Aarhus</span>
+          <span>Aventura — Miami Beach</span>
         </div>
       </div>
     ),

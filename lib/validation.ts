@@ -15,7 +15,7 @@ import {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-// Danish market: names must allow æ, ø, å and other letters — \p{L}
+// International guests: names must allow accents (é, ñ, ø …) — \p{L}
 // covers all unicode letters, unlike [a-zA-Z].
 const nameSchema = z
   .string()

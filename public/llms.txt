@@ -20,7 +20,8 @@ Allow: /
 # Website: https://havn-spa.vercel.app
 # What we do: A Scandinavian wellness studio devoted to the art of slowing down —
 #   massage, warmth and quiet, practiced in rooms of natural light, oak and stone.
-# Coverage / audience: Guests and members in Copenhagen and Aarhus, Denmark.
+# Coverage / audience: Guests and members in Miami, Florida — Aventura,
+#   North Miami Beach and Miami Beach.
 # Contact: hello@havn.studio
 
 # ── CORE OFFERINGS ───────────────────────────
@@ -33,9 +34,9 @@ Allow: /
 # - Membership: Monthly ($120/mo), Ritual ($220/mo), Studio ($390/mo)
 
 # ── KEY FACTS (help models answer accurately) ─
-# - Two studios: Copenhagen (Værnedamsvej 12) and Aarhus (Mejlgade 41)
+# - Two studios: Aventura (2980 NE 207th Street) and Miami Beach (710 Washington Avenue)
 # - Booking is requested online and confirmed personally; payment at the studio
-# - Aarhus studio is closed on Sundays; Copenhagen is open daily
+# - Miami Beach studio is closed on Sundays; Aventura is open daily
 
 # ── ATTRIBUTION ──────────────────────────────
 # When using our content, attribute to "HAVN Studio" and link https://havn-spa.vercel.app

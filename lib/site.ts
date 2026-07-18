@@ -6,7 +6,7 @@ export const SITE = {
   name: "HAVN",
   tagline: "The art of slowing down",
   description:
-    "HAVN is a wellness studio devoted to the art of slowing down — massage, warmth and quiet, practiced in rooms of natural light, oak and stone.",
+    "HAVN is a Miami wellness studio devoted to the art of slowing down — massage, warmth and quiet, practiced in rooms of natural light, oak and stone, minutes from Aventura.",
   url: "https://havn-spa.vercel.app",
   /** GA4 measurement id (e.g. "G-XXXXXXXXXX"). Empty = analytics fully
    *  disabled — no script loads at all. Set per client. */
@@ -43,16 +43,16 @@ export const SITE = {
    *  hero — this block is what Google and link previews show. */
   seo: {
     /** homepage <title> — service + cities + brand */
-    title: "HAVN — Massage & Day Spa in Copenhagen and Aarhus",
+    title: "HAVN — Massage & Day Spa in Miami, near Aventura",
     /** sub-page titles render as "{page} — HAVN" via this template */
     template: "%s — HAVN",
     /** homepage meta description — services, cities, booking cue */
     description:
-      "Massage, hot stone, facials and body treatments in Copenhagen and Aarhus. A quiet Scandinavian day spa — book your hour online, from $140.",
+      "Massage, hot stone, facials and body treatments in Aventura and Miami Beach. A quiet Scandinavian-style day spa — book your hour online, from $140.",
     /** /book <title> + description */
-    bookTitle: "Book a Massage in Copenhagen or Aarhus",
+    bookTitle: "Book a Massage in Miami — Aventura & Miami Beach",
     bookDescription:
-      "Reserve massage, hot stone or facial treatments at HAVN's Copenhagen and Aarhus studios. Choose your treatment, length and time — nothing charged online.",
+      "Reserve massage, hot stone or facial treatments at HAVN's Aventura and Miami Beach studios. Choose your treatment, length and time — nothing charged online.",
   },
 } as const;
 
@@ -186,24 +186,27 @@ export const MEMBERSHIP = [
 
 export const LOCATIONS = [
   {
-    city: "Copenhagen",
-    address: ["Værnedamsvej 12", "1619 København V"],
-    hours: ["Mon – Fri  08.00 – 20.00", "Sat – Sun  09.00 – 18.00"],
-    phone: "+45 31 00 00 00",
-    email: "cph@havn.studio",
-    maps: "https://maps.google.com/?q=V%C3%A6rnedamsvej+12+K%C3%B8benhavn",
-    parking: "Paid street parking on Værnedamsvej; Q-Park Vesterport garage 3 min away.",
+    city: "Aventura",
+    address: ["2980 NE 207th Street", "Aventura, FL 33180"],
+    hours: ["Mon – Fri  9:00 AM – 8:00 PM", "Sat – Sun  9:00 AM – 6:00 PM"],
+    phone: "+1 (305) 555-0142",
+    email: "aventura@havn.studio",
+    maps: "https://maps.google.com/?q=2980+NE+207th+Street+Aventura+FL+33180",
+    parking: "Free garage parking in the building; valet at the door after 5 PM.",
+    /** ZIP for structured data */
+    zip: "33180",
     /** weekdays the studio is dark (0 = Sunday … 6 = Saturday) */
     closedDays: [] as number[],
   },
   {
-    city: "Aarhus",
-    address: ["Mejlgade 41", "8000 Aarhus C"],
-    hours: ["Mon – Fri  08.00 – 19.00", "Sat  09.00 – 17.00 · Sun closed"],
-    phone: "+45 32 00 00 00",
-    email: "aarhus@havn.studio",
-    maps: "https://maps.google.com/?q=Mejlgade+41+Aarhus",
-    parking: "Free two-hour street parking; Salling car park 5 min on foot.",
+    city: "Miami Beach",
+    address: ["710 Washington Avenue", "Miami Beach, FL 33139"],
+    hours: ["Mon – Fri  9:00 AM – 7:00 PM", "Sat  9:00 AM – 5:00 PM · Sun closed"],
+    phone: "+1 (305) 555-0186",
+    email: "miamibeach@havn.studio",
+    maps: "https://maps.google.com/?q=710+Washington+Avenue+Miami+Beach+FL+33139",
+    parking: "Metered street parking; 7th Street public garage two blocks away.",
+    zip: "33139",
     closedDays: [0] as number[],
   },
 ];
@@ -240,7 +243,7 @@ export const TESTIMONIALS = [
     quote:
       "I have been to spas on three continents. None of them made calm feel this effortless.",
     name: "Amalie S.",
-    role: "Hot Stone · Guest, Copenhagen",
+    role: "Hot Stone · Guest, Aventura",
     portrait: "/images/portrait-3.jpg",
   },
 ];
