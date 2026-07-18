@@ -54,14 +54,14 @@ export default function Hero() {
     return () => ctx.revert();
   }, []);
 
-  const heroLines = ["The art of", "slowing down."];
+  const heroLines = SITE.hero.lines;
 
   return (
     <section ref={rootRef} className="relative min-h-screen">
       <div className="mx-auto grid max-w-[1440px] gap-12 px-6 pt-36 md:grid-cols-[1.15fr_0.85fr] md:gap-8 md:px-12 md:pt-44">
         {/* ——— statement ——— */}
         <div className="flex flex-col justify-between pb-16">
-          <h1 className="type-hero" aria-label={heroLines.join(" ")}>
+          <h1 className="type-hero" aria-label={SITE.hero.headline}>
             {heroLines.map((line) => (
               <span key={line} className="line-mask" aria-hidden>
                 <span className="line-inner" style={{ transform: "translateY(110%)" }}>
@@ -73,11 +73,12 @@ export default function Hero() {
 
           <div className="mt-20 max-w-md md:mt-0">
             <p data-hero-fade className="measure text-[0.95rem] text-gray">
-              {SITE.name} is a wellness studio devoted to one discipline: rest. Massage, warmth
-              and silence, practiced in rooms of light, oak and stone.
+              {SITE.hero.subtext}
             </p>
             <div data-hero-fade className="mt-10 flex flex-wrap items-center gap-5">
-              <Button href="/book">Book appointment</Button>
+              <span data-track="begin_booking" data-track-source="hero">
+                <Button href="/book">Book appointment</Button>
+              </span>
               <Button href="/#treatments" variant="ghost">
                 Explore treatments
               </Button>

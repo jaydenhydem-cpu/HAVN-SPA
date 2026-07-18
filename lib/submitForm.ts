@@ -12,7 +12,12 @@ import { SITE } from "./site";
 export async function submitLead(
   subject: string,
   fields: Record<string, unknown>,
+  /** Honeypot value from the form's hidden field — humans leave it empty,
+   *  bots fill it. Non-empty = silently discard (report success, send
+   *  nothing) so the bot learns nothing. */
+  honeypot?: string,
 ): Promise<{ ok: boolean; error?: string }> {
+  if (honeypot) return { ok: true };
   if (!SITE.formEndpoint || !SITE.formAccessKey) {
     if (typeof console !== "undefined") {
       console.info(`[${SITE.name}] ${subject} (log-only — set SITE.formEndpoint + formAccessKey)`, fields);

@@ -58,6 +58,16 @@ sanitize, return field-level errors, CORS-allowlist SITE.url, and forward via li
 → SITE.formEndpoint (empty = log-only). BookingFlow + Footer validate in real time and POST
 to the APIs. robots.ts now disallows /api/.
 
+**Launch checklist (2026-07-18):** /legal page (privacy, terms, cancellation,
+accessibility — in footer + sitemap). Honeypot spam protection on all four forms
+(components/ui/Honeypot.tsx → submitLead's third arg silently discards). Conversion
+tracking layered on GA4 (lib/analytics.ts `trackEvent` + components/TrackClicks.tsx
+delegated `data-track` listener; vocabulary documented in lib/analytics.ts:
+booking_request, begin_booking, contact_submit, membership_lead, newsletter_signup,
+phone/email/directions_click). All no-op while SITE.analyticsId is empty. Footer now
+carries full NAP (phones included). Hero h1 is the brand line again; SEO headline
+lives in the h1 aria-label via SITE.hero.headline.
+
 **Crawlability playbook run (2026-07-10): PASS, no work needed.** Phase 0 diagnosis —
 distinct HTML per route, unique titles/canonicals, ~1,900 pre-JS words on home. Production
 build: every route is ○ Static (prerendered HTML files). Pages are server components

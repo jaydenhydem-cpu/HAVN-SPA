@@ -33,7 +33,12 @@ export default function LocationSection() {
                       </span>
                     ))}
                   </address>
-                  <a className="link-center mt-3 inline-block" href={`tel:${l.phone.replace(/\s/g, "")}`}>
+                  <a
+                    className="link-center mt-3 inline-block"
+                    href={`tel:${l.phone.replace(/[^+\d]/g, "")}`}
+                    data-track="phone_click"
+                    data-track-studio={l.city}
+                  >
                     {l.phone}
                   </a>
                 </div>
@@ -54,14 +59,29 @@ export default function LocationSection() {
                   <Link
                     href={`/book?location=${encodeURIComponent(l.city)}`}
                     className="inline-flex rounded-full bg-ink px-6 py-3 text-[0.75rem] tracking-[0.08em] text-paper transition-all duration-500 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_-12px_rgba(28,28,28,0.45)]"
+                    data-track="begin_booking"
+                    data-track-source="location"
+                    data-track-studio={l.city}
                   >
                     Book at {l.city}
                   </Link>
                   <div className="flex flex-col gap-2 text-[0.95rem]">
-                    <a className="link-center self-start" href={l.maps} target="_blank" rel="noreferrer">
+                    <a
+                      className="link-center self-start"
+                      href={l.maps}
+                      target="_blank"
+                      rel="noreferrer"
+                      data-track="directions_click"
+                      data-track-studio={l.city}
+                    >
                       Directions ↗
                     </a>
-                    <a className="link-center self-start" href={`mailto:${l.email}`}>
+                    <a
+                      className="link-center self-start"
+                      href={`mailto:${l.email}`}
+                      data-track="email_click"
+                      data-track-studio={l.city}
+                    >
                       Write to us
                     </a>
                   </div>

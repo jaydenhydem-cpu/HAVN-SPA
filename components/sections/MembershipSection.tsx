@@ -6,6 +6,8 @@ import AnimatedSection from "@/components/ui/AnimatedSection";
 import { MEMBERSHIP } from "@/lib/site";
 import { bookingDetailsSchema } from "@/lib/validation";
 import { submitLead } from "@/lib/submitForm";
+import { trackEvent } from "@/lib/analytics";
+import Honeypot from "@/components/ui/Honeypot";
 
 type Plan = (typeof MEMBERSHIP)[number];
 
@@ -77,6 +79,7 @@ function MembershipModal({ plan, onClose }: { plan: Plan | null; onClose: () => 
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
+  const [hp, setHp] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [pending, setPending] = useState(false);
   const [done, setDone] = useState(false);
@@ -115,18 +118,23 @@ function MembershipModal({ plan, onClose }: { plan: Plan | null; onClose: () => 
       return;
     }
     setPending(true);
-    const r = await submitLead(`Membership interest — ${plan?.name}`, {
-      plan: plan ? `${plan.name} · $${plan.price}/${plan.per}` : "",
-      name,
-      email,
-      phone,
-      message,
-    });
+    const r = await submitLead(
+      `Membership interest — ${plan?.name}`,
+      {
+        plan: plan ? `${plan.name} · $${plan.price}/${plan.per}` : "",
+        name,
+        email,
+        phone,
+        message,
+      },
+      hp,
+    );
     setPending(false);
     if (!r.ok) {
       setErrors({ form: r.error ?? "Something went quiet — please try again." });
       return;
     }
+    trackEvent("membership_lead", { plan: plan?.name });
     setDone(true);
   };
 
@@ -174,6 +182,7 @@ function MembershipModal({ plan, onClose }: { plan: Plan | null; onClose: () => 
               </div>
             ) : (
               <form onSubmit={submit} noValidate>
+                <Honeypot value={hp} onChange={setHp} />
                 <p className="kicker">Membership</p>
                 <h3 className="type-title mt-3">The {plan.name} membership</h3>
                 <p className="mt-3 text-sm text-gray">

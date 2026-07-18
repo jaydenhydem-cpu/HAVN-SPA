@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Cursor from "@/components/ui/Cursor";
 import Analytics from "@/components/Analytics";
+import TrackClicks from "@/components/TrackClicks";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -58,6 +59,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="antialiased">
         <Analytics />
+        <TrackClicks />
         <SmoothScroll>
           <Cursor />
           <Navbar />

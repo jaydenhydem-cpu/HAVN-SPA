@@ -16,6 +16,8 @@ import {
 import { bookingSchema, bookingDetailsSchema, getFieldErrors } from "@/lib/validation";
 import { sanitizeObject } from "@/lib/sanitize";
 import { submitLead } from "@/lib/submitForm";
+import { trackEvent } from "@/lib/analytics";
+import Honeypot from "@/components/ui/Honeypot";
 
 /**
  * The booking ritual — six questions, one at a time, with a running
@@ -115,6 +117,7 @@ function Flow() {
   const [hydrated, setHydrated] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
+  const [hp, setHp] = useState("");
   const [apiError, setApiError] = useState("");
   const [serverTotal, setServerTotal] = useState<number | null>(null);
 
@@ -220,16 +223,27 @@ function Flow() {
 
     setSubmitting(true);
     const clean = sanitizeObject(result.data);
-    const r = await submitLead("New booking request", {
-      ...clean,
-      enhancements: chosenEnhancements.map((e) => e.name).join(", ") || "None",
-      total: `$${total}`,
-    });
+    const r = await submitLead(
+      "New booking request",
+      {
+        ...clean,
+        enhancements: chosenEnhancements.map((e) => e.name).join(", ") || "None",
+        total: `$${total}`,
+      },
+      hp,
+    );
     setSubmitting(false);
     if (!r.ok) {
       setApiError(r.error ?? "Something went quiet on our end — please try again.");
       return;
     }
+    // THE conversion — a completed appointment request
+    trackEvent("booking_request", {
+      treatment: sel.treatment ?? undefined,
+      studio: sel.studio ?? undefined,
+      minutes: sel.minutes ?? undefined,
+      value: total,
+    });
     setServerTotal(total);
     try {
       sessionStorage.removeItem(STORE_KEY);
@@ -455,6 +469,7 @@ function Flow() {
               <motion.fieldset key="you" {...stepMotion}>
                 <legend className="kicker">06 — You</legend>
                 <h2 className="type-title mt-6">Lastly, who is coming?</h2>
+                <Honeypot value={hp} onChange={setHp} />
                 <div className="mt-10 grid max-w-2xl gap-10 md:grid-cols-2">
                   <label className="block">
                     <span className="kicker">Your name</span>

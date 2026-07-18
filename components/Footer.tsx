@@ -6,6 +6,8 @@ import { SITE, LOCATIONS } from "@/lib/site";
 import { newsletterSchema } from "@/lib/validation";
 import { sanitizeEmail } from "@/lib/sanitize";
 import { submitLead } from "@/lib/submitForm";
+import { trackEvent } from "@/lib/analytics";
+import Honeypot from "@/components/ui/Honeypot";
 
 /**
  * Extremely minimal footer: one serif farewell, a quiet newsletter
@@ -13,6 +15,7 @@ import { submitLead } from "@/lib/submitForm";
  */
 export default function Footer() {
   const [email, setEmail] = useState("");
+  const [hp, setHp] = useState("");
   const [done, setDone] = useState(false);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
@@ -26,12 +29,13 @@ export default function Footer() {
       return;
     }
     setPending(true);
-    const r = await submitLead("Newsletter signup", { email: sanitizeEmail(result.data.email) });
+    const r = await submitLead("Newsletter signup", { email: sanitizeEmail(result.data.email) }, hp);
     setPending(false);
     if (!r.ok) {
       setError(r.error ?? "Something went quiet — please try again.");
       return;
     }
+    trackEvent("newsletter_signup");
     setDone(true);
   };
 
@@ -46,6 +50,7 @@ export default function Footer() {
               We will keep the room warm.
             </p>
             <form onSubmit={submit} className="mt-12 max-w-sm">
+              <Honeypot value={hp} onChange={setHp} />
               <label htmlFor="newsletter" className="kicker">
                 Letters, occasionally
               </label>
@@ -94,7 +99,9 @@ export default function Footer() {
             <p className="kicker">Contact</p>
             <ul className="mt-6 flex flex-col gap-3 text-sm text-ink/80">
               <li>
-                <a className="link-center" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+                <a className="link-center" href={`mailto:${SITE.email}`} data-track="email_click">
+                  {SITE.email}
+                </a>
               </li>
               <li>
                 <a className="link-center" href={SITE.instagram} target="_blank" rel="noreferrer">
@@ -103,7 +110,15 @@ export default function Footer() {
               </li>
               {LOCATIONS.map((l) => (
                 <li key={l.city} className="text-gray">
-                  {l.city} · {l.address[0]}
+                  {l.city} · {l.address[0]} ·{" "}
+                  <a
+                    className="link-center"
+                    href={`tel:${l.phone.replace(/[^+\d]/g, "")}`}
+                    data-track="phone_click"
+                    data-track-studio={l.city}
+                  >
+                    {l.phone}
+                  </a>
                 </li>
               ))}
             </ul>
@@ -112,6 +127,9 @@ export default function Footer() {
 
         <div className="rule mt-24 flex flex-col gap-2 pt-8 text-xs text-gray md:flex-row md:items-center md:justify-between">
           <span>{SITE.copyright}</span>
+          <Link className="link-center" href="/legal">
+            Privacy · Terms · Cancellation · Accessibility
+          </Link>
           <span>{SITE.tagline}.</span>
         </div>
         <p className="mt-4 text-xs text-gray/70">

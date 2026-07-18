@@ -54,6 +54,26 @@ export const SITE = {
     bookDescription:
       "Reserve massage, hot stone or facial treatments at HAVN's Aventura and Miami Beach studios. Choose your treatment, length and time — nothing charged online.",
   },
+
+  /** ── Homepage hero ──────────────────────────────────────────────
+   *  `lines` render as the giant animated h1 — each line sits inside a
+   *  mask with overflow:hidden (for the slide-up reveal), and the type
+   *  scales up to 9rem on wide screens while the column caps at ~754px,
+   *  so a line MUST measure under ~740px at 144px serif or it gets
+   *  silently clipped. Tested-safe short lines only — verify any new
+   *  line in devtools at a 1920px viewport before shipping:
+   *  `getComputedStyle(el).fontSize` should read 144px there.
+   *  `headline` is the h1's accessible name (aria-label) — it isn't
+   *  layout-constrained like `lines`, so it carries the full keyword
+   *  phrase and mirrors `seo.title` for topical consistency. REWRITE
+   *  PER CLIENT, e.g. lines: ["Facials", "Aventura"],
+   *  headline: "Facials & Skincare in Aventura, Miami". */
+  hero: {
+    lines: ["The art of", "slowing down."],
+    headline: "Massage & Day Spa in Miami, near Aventura",
+    subtext:
+      "HAVN is a Miami day spa with studios in Aventura and Miami Beach, offering massage, hot stone treatments, facials and body treatments in quiet rooms of natural light, oak and stone. Book your appointment online.",
+  },
 } as const;
 
 export type Duration = { minutes: number; price: number };

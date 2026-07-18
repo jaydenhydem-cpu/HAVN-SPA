@@ -45,7 +45,12 @@ export default function TreatmentShowcase() {
                   <p className="mt-6 text-sm text-gray">
                     <span className="kicker text-gray/80">Suited to</span> {t.suitedFor}
                   </p>
-                  <div className="mt-10">
+                  <div
+                    className="mt-10"
+                    data-track="begin_booking"
+                    data-track-source="treatment"
+                    data-track-treatment={t.slug}
+                  >
                     <Button href={`/book?treatment=${t.slug}`} variant="ghost">
                       Book {t.name}
                     </Button>

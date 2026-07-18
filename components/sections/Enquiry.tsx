@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { enquirySchema } from "@/lib/validation";
 import { submitLead } from "@/lib/submitForm";
+import { trackEvent } from "@/lib/analytics";
+import Honeypot from "@/components/ui/Honeypot";
 
 /**
  * General enquiry / lead-capture form. Mirrors the booking + newsletter
@@ -13,6 +15,7 @@ export default function Enquiry() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [hp, setHp] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [pending, setPending] = useState(false);
   const [done, setDone] = useState(false);
@@ -31,12 +34,13 @@ export default function Enquiry() {
       return;
     }
     setPending(true);
-    const r = await submitLead("New enquiry", result.data);
+    const r = await submitLead("New enquiry", result.data, hp);
     setPending(false);
     if (!r.ok) {
       setErrors({ form: r.error ?? "Something went quiet — please try again." });
       return;
     }
+    trackEvent("contact_submit");
     setDone(true);
   };
 
@@ -77,6 +81,7 @@ export default function Enquiry() {
               </div>
             ) : (
               <form onSubmit={submit} className="flex flex-col gap-8" noValidate>
+                <Honeypot value={hp} onChange={setHp} />
                 <Field label="Your name" value={name} onChange={setName} error={errors.name} />
                 <Field label="Email" type="email" value={email} onChange={setEmail} error={errors.email} />
                 <Field label="Your message" textarea value={message} onChange={setMessage} error={errors.message} />

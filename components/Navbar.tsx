@@ -65,6 +65,8 @@ export default function Navbar() {
           <Link
             href="/book"
             data-cursor
+            data-track="begin_booking"
+            data-track-source="nav"
             className="hidden rounded-full bg-ink px-6 py-3 text-[0.75rem] tracking-[0.08em] text-paper transition-all duration-500 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_-12px_rgba(28,28,28,0.45)] md:inline-flex"
           >
             Book appointment
@@ -121,6 +123,8 @@ export default function Navbar() {
               <Link
                 href="/book"
                 onClick={() => setOpen(false)}
+                data-track="begin_booking"
+                data-track-source="mobile_menu"
                 className="inline-flex w-full items-center justify-center rounded-full bg-ink px-8 py-5 text-[0.85rem] tracking-[0.08em] text-paper"
               >
                 Book appointment
