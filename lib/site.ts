@@ -30,6 +30,30 @@ export const SITE = {
   email: "hello@havn.studio",
   instagram: "https://instagram.com",
   copyright: `© ${new Date().getFullYear()} HAVN Studio`,
+
+  /** ── SEO ────────────────────────────────────────────────────────
+   *  Search engines rank pages for what people actually type — services
+   *  and places — so every title/description here follows the pattern
+   *  "{Service} in {City}". REWRITE PER CLIENT, e.g.:
+   *    title:       "Massage Therapy & Day Spa in Miami — Solara Spa"
+   *    description: "Deep tissue, hot stone and facials in Wynwood,
+   *                  Miami. Book online — easy parking on NW 2nd Ave."
+   *  Keep titles ≤ 60 chars and descriptions 140–160 chars so they don't
+   *  truncate in results. The brand tagline still lives in the visible
+   *  hero — this block is what Google and link previews show. */
+  seo: {
+    /** homepage <title> — service + cities + brand */
+    title: "HAVN — Massage & Day Spa in Copenhagen and Aarhus",
+    /** sub-page titles render as "{page} — HAVN" via this template */
+    template: "%s — HAVN",
+    /** homepage meta description — services, cities, booking cue */
+    description:
+      "Massage, hot stone, facials and body treatments in Copenhagen and Aarhus. A quiet Scandinavian day spa — book your hour online, from $140.",
+    /** /book <title> + description */
+    bookTitle: "Book a Massage in Copenhagen or Aarhus",
+    bookDescription:
+      "Reserve massage, hot stone or facial treatments at HAVN's Copenhagen and Aarhus studios. Choose your treatment, length and time — nothing charged online.",
+  },
 } as const;
 
 export type Duration = { minutes: number; price: number };

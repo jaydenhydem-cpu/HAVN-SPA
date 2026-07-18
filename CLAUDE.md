@@ -39,7 +39,10 @@ testimonial crossfade). No Three.js (deliberately skipped — calm > atmosphere 
 (sessionStorage persistence, closed-day validation, ?treatment= deep links), nav
 (transparent→solid), footer, custom cursor ring, images curated, type-check + lint clean.
 
-**SEO done (2026-07-10):** robots.ts, sitemap.ts, public/llms.txt, canonical per page,
+**SEO done (2026-07-10, titles reworked 2026-07-13):** all titles/descriptions are
+service+location oriented ("Massage & Day Spa in Copenhagen…") and live in the
+`SITE.seo` block in lib/site.ts — rewrite that one block per client ("Massage Therapy
+in Miami — {Brand}"). robots.ts, sitemap.ts, public/llms.txt, canonical per page,
 robots meta (max-snippet etc.), OG + Twitter cards, generated opengraph-image.tsx +
 icon.tsx, JSON-LD (Organization + WebSite + 2× DaySpa with Offer/Service menu) in
 app/page.tsx, GA4 config-gated via SITE.analyticsId (components/Analytics.tsx, empty =

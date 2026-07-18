@@ -9,11 +9,15 @@ import Analytics from "@/components/Analytics";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
+  // Titles/descriptions are service + location oriented (what people
+  // search) and live in SITE.seo — rewrite there per client, e.g.
+  // "Massage Therapy in Miami — {Brand}". The poetic tagline stays in
+  // the visible hero; this block is what Google and link previews show.
   title: {
-    default: `${SITE.name} — ${SITE.tagline}`,
-    template: `%s — ${SITE.name}`,
+    default: SITE.seo.title,
+    template: SITE.seo.template,
   },
-  description: SITE.description,
+  description: SITE.seo.description,
   // homepage canonical; sub-pages set their own via `alternates`
   alternates: { canonical: "/" },
   // let Google show full snippets and large previews
@@ -29,8 +33,8 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: `${SITE.name} — ${SITE.tagline}`,
-    description: SITE.description,
+    title: SITE.seo.title,
+    description: SITE.seo.description,
     url: SITE.url,
     siteName: SITE.name,
     locale: "en_US",
@@ -38,8 +42,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE.name} — ${SITE.tagline}`,
-    description: SITE.description,
+    title: SITE.seo.title,
+    description: SITE.seo.description,
   },
 };
 

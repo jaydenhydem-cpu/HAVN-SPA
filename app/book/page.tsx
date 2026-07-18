@@ -1,11 +1,19 @@
 import type { Metadata } from "next";
 import BookingFlow from "@/components/BookingFlow";
+import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Book an appointment",
-  description:
-    "Reserve your hour of quiet at HAVN — choose a treatment, length and studio, and see your total as you go.",
+  // "Book a Massage in {City}" — high-intent search phrasing, set in SITE.seo
+  title: SITE.seo.bookTitle,
+  description: SITE.seo.bookDescription,
   alternates: { canonical: "/book" },
+  openGraph: {
+    title: `${SITE.seo.bookTitle} — ${SITE.name}`,
+    description: SITE.seo.bookDescription,
+    url: `${SITE.url}/book`,
+    siteName: SITE.name,
+    type: "website",
+  },
 };
 
 export default function BookPage() {
