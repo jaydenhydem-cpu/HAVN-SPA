@@ -11,6 +11,7 @@ import {
   TIME_SLOTS,
   isClosedOn,
   closedDayNames,
+  formatTimeSlot,
   type Treatment,
 } from "@/lib/site";
 import { bookingSchema, bookingDetailsSchema, getFieldErrors } from "@/lib/validation";
@@ -227,6 +228,7 @@ function Flow() {
       "New booking request",
       {
         ...clean,
+        time: clean.time ? formatTimeSlot(clean.time) : clean.time,
         enhancements: chosenEnhancements.map((e) => e.name).join(", ") || "None",
         total: `$${total}`,
       },
@@ -263,7 +265,7 @@ function Flow() {
         : []),
       ["Studio", sel.studio ?? "—"],
       ["Date", sel.date || "—"],
-      ["Time", sel.time ?? "—"],
+      ["Time", sel.time ? formatTimeSlot(sel.time) : "—"],
       ["Guest", `${sel.name} · ${sel.email}`],
     ];
     return (
@@ -456,7 +458,7 @@ function Flow() {
                               : "border-ink/20 text-ink/80 hover:border-ink/50"
                           }`}
                         >
-                          {t}
+                          {formatTimeSlot(t)}
                         </button>
                       ))}
                     </div>
@@ -582,7 +584,7 @@ function Flow() {
                 {sel.studio ?? "Studio"}
               </dt>
               <dd className="text-gray">
-                {sel.date && sel.time ? `${sel.date} · ${sel.time}` : ""}
+                {sel.date && sel.time ? `${sel.date} · ${formatTimeSlot(sel.time)}` : ""}
               </dd>
             </div>
           </dl>

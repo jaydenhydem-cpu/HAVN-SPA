@@ -172,6 +172,15 @@ export const ENHANCEMENTS: Enhancement[] = [
 
 export const TIME_SLOTS = ["09:00", "10:30", "12:00", "13:30", "15:00", "16:30", "18:00"];
 
+/** "13:30" → "1:30 PM" — slots stay in 24h internally (sorting, validation);
+ *  this only formats them for display and outgoing emails. */
+export function formatTimeSlot(time: string): string {
+  const [h, m] = time.split(":").map(Number);
+  const period = h >= 12 ? "PM" : "AM";
+  const hour12 = h % 12 || 12;
+  return `${hour12}:${String(m).padStart(2, "0")} ${period}`;
+}
+
 export const MEMBERSHIP = [
   {
     name: "Monthly",
