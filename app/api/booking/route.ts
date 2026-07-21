@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { bookingSchema, bookingTotal, getFieldErrors } from "@/lib/validation";
 import { sanitizeObject } from "@/lib/sanitize";
-import { deliver } from "@/lib/notify";
+import { supabaseAdmin } from "@/lib/supabase";
 import { SITE } from "@/lib/site";
 
 const ALLOWED_ORIGINS = [SITE.url, "http://localhost:3000"];
@@ -36,8 +36,39 @@ export async function POST(request: NextRequest) {
     const clean = sanitizeObject(result.data);
     const total = bookingTotal(clean);
 
-    await deliver("New booking request", { ...clean, total });
+    // The unique (studio, date, time) constraint is the actual guard against
+    // double-booking — even a dead-heat race between two submissions, the
+    // database rejects whichever insert lands second.
+    const { error: insertError } = await supabaseAdmin.from("bookings").insert({
+      studio: clean.studio,
+      date: clean.date,
+      time: clean.time,
+      treatment: clean.treatment,
+      minutes: clean.minutes,
+      enhancements: clean.enhancements.join(", ") || null,
+      name: clean.name,
+      email: clean.email,
+      notes: clean.notes || null,
+      total,
+    });
 
+    if (insertError) {
+      if (insertError.code === "23505") {
+        return NextResponse.json(
+          { success: false, error: "That time was just taken — please choose another." },
+          { status: 409, headers: corsHeaders(origin) }
+        );
+      }
+      console.error("booking insert error:", insertError);
+      return NextResponse.json(
+        { success: false, error: "We could not take your booking just now — please try again." },
+        { status: 500, headers: corsHeaders(origin) }
+      );
+    }
+
+    // The row is the source of truth (and the double-booking guard). Email
+    // notification is sent separately, client-side — Web3Forms' free tier
+    // rejects server-to-server posts (403), so the browser owns that step.
     return NextResponse.json(
       { success: true, total, message: "Booking request received" },
       { status: 200, headers: corsHeaders(origin) }

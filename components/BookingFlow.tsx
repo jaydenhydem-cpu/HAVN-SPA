@@ -121,6 +121,7 @@ function Flow() {
   const [hp, setHp] = useState("");
   const [apiError, setApiError] = useState("");
   const [serverTotal, setServerTotal] = useState<number | null>(null);
+  const [takenTimes, setTakenTimes] = useState<string[]>([]);
 
   // restore a half-finished booking, then apply any ?treatment= preselect
   useEffect(() => {
@@ -178,6 +179,29 @@ function Flow() {
   const dateClosed = studio ? isClosedOn(studio.closedDays, sel.date) : false;
   const today = new Date().toISOString().slice(0, 10);
 
+  // Which slots are already booked for the chosen studio + date.
+  useEffect(() => {
+    if (!sel.studio || !sel.date || dateClosed) {
+      setTakenTimes([]);
+      return;
+    }
+    let cancelled = false;
+    fetch(`/api/availability?studio=${encodeURIComponent(sel.studio)}&date=${sel.date}`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (cancelled || !data?.success) return;
+        const taken = data.taken as string[];
+        setTakenTimes(taken);
+        setSel((s) => (s.time && taken.includes(s.time) ? { ...s, time: null } : s));
+      })
+      .catch(() => {
+        /* non-fatal — worst case a taken slot surfaces the 409 on submit */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [sel.studio, sel.date, dateClosed]);
+
   const canContinue = [
     !!sel.treatment,
     !!sel.minutes,
@@ -222,23 +246,51 @@ function Flow() {
       return;
     }
 
-    setSubmitting(true);
-    const clean = sanitizeObject(result.data);
-    const r = await submitLead(
-      "New booking request",
-      {
-        ...clean,
-        time: clean.time ? formatTimeSlot(clean.time) : clean.time,
-        enhancements: chosenEnhancements.map((e) => e.name).join(", ") || "None",
-        total: `$${total}`,
-      },
-      hp,
-    );
-    setSubmitting(false);
-    if (!r.ok) {
-      setApiError(r.error ?? "Something went quiet on our end — please try again.");
+    // humans leave the honeypot empty; bots fill it — report success, send nothing
+    if (hp) {
+      setServerTotal(total);
+      setConfirmed(true);
       return;
     }
+
+    setSubmitting(true);
+    const clean = sanitizeObject(result.data);
+    let json: { success: boolean; error?: string } = { success: false };
+    try {
+      const res = await fetch("/api/booking", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(clean),
+      });
+      json = await res.json();
+      if (res.status === 409) {
+        // slot was just taken — refresh availability so it shows as taken
+        setSel((s) => ({ ...s, time: null }));
+        fetch(`/api/availability?studio=${encodeURIComponent(clean.studio)}&date=${clean.date}`)
+          .then((r) => r.json())
+          .then((data) => data?.success && setTakenTimes(data.taken as string[]))
+          .catch(() => {});
+      }
+    } catch {
+      json = { success: false, error: "Something went quiet on our end — please try again." };
+    }
+    if (!json.success) {
+      setSubmitting(false);
+      setApiError(json.error ?? "Something went quiet on our end — please try again.");
+      return;
+    }
+
+    // The slot is now held in the database (source of truth). Email the studio
+    // as a notification — best-effort, so a delivery hiccup never loses a
+    // booking that's already saved.
+    await submitLead("New booking request", {
+      ...clean,
+      time: clean.time ? formatTimeSlot(clean.time) : clean.time,
+      enhancements: chosenEnhancements.map((e) => e.name).join(", ") || "None",
+      total: `$${total}`,
+    });
+    setSubmitting(false);
+
     // THE conversion — a completed appointment request
     trackEvent("booking_request", {
       treatment: sel.treatment ?? undefined,
@@ -445,22 +497,29 @@ function Flow() {
                   <div className="mt-10">
                     <span className="kicker">Time</span>
                     <div className="mt-4 flex flex-wrap gap-3">
-                      {TIME_SLOTS.map((t) => (
-                        <button
-                          key={t}
-                          type="button"
-                          data-cursor
-                          onClick={() => setSel((s) => ({ ...s, time: t }))}
-                          aria-pressed={sel.time === t}
-                          className={`rounded-full border px-5 py-2.5 text-sm tabular-nums transition-all duration-400 ${
-                            sel.time === t
-                              ? "border-ink bg-ink text-paper"
-                              : "border-ink/20 text-ink/80 hover:border-ink/50"
-                          }`}
-                        >
-                          {formatTimeSlot(t)}
-                        </button>
-                      ))}
+                      {TIME_SLOTS.map((t) => {
+                        const taken = takenTimes.includes(t);
+                        return (
+                          <button
+                            key={t}
+                            type="button"
+                            data-cursor={!taken}
+                            disabled={taken}
+                            onClick={() => setSel((s) => ({ ...s, time: t }))}
+                            aria-pressed={sel.time === t}
+                            aria-disabled={taken}
+                            className={`rounded-full border px-5 py-2.5 text-sm tabular-nums transition-all duration-400 ${
+                              taken
+                                ? "cursor-not-allowed border-ink/10 text-gray/50 line-through"
+                                : sel.time === t
+                                  ? "border-ink bg-ink text-paper"
+                                  : "border-ink/20 text-ink/80 hover:border-ink/50"
+                            }`}
+                          >
+                            {formatTimeSlot(t)}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
