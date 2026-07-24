@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyStripeSignature } from "@/lib/booking/stripe";
 import { markConfirmedBySession, setStatus } from "@/lib/booking/db";
+import { sendBookingConfirmation } from "@/lib/booking/notify";
 
 // Webhook needs the raw body + Node crypto — force the Node.js runtime.
 export const runtime = "nodejs";
@@ -34,7 +35,10 @@ export async function POST(request: NextRequest) {
     if (event.type === "checkout.session.completed") {
       const session = event.data.object as { id: string; payment_intent?: string; payment_status?: string };
       if (session.payment_status === "paid" || session.payment_status === undefined) {
-        await markConfirmedBySession(session.id, session.payment_intent ?? null);
+        // Returns the row only on the first pending→confirmed transition, so
+        // the email sends exactly once even if Stripe retries the webhook.
+        const confirmed = await markConfirmedBySession(session.id, session.payment_intent ?? null);
+        if (confirmed) await sendBookingConfirmation(confirmed);
       }
     } else if (event.type === "payment_intent.payment_failed") {
       const intent = event.data.object as { metadata?: { appointment_id?: string } };

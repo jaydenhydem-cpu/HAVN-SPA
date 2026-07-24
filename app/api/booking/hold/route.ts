@@ -10,6 +10,7 @@ import { BOOKING_CONFIG } from "@/lib/booking/config";
 import { BOOKING_POLICY } from "@/lib/booking/data/policy";
 import { zonedDateStr } from "@/lib/booking/time";
 import { createDepositCheckout } from "@/lib/booking/stripe";
+import { sendBookingConfirmation } from "@/lib/booking/notify";
 import type { AppointmentRow } from "@/lib/booking/db";
 
 export const dynamic = "force-dynamic";
@@ -117,8 +118,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: false, error: result.reason, message: result.message }, { status });
   }
 
-  // Safety: no-deposit bookings are already confirmed above.
-  if (noDeposit) await setStatus(id, "confirmed");
+  // No-deposit bookings are confirmed immediately — send their email now
+  // (deposit bookings get theirs from the Stripe webhook / dev-pay step).
+  if (noDeposit) {
+    await setStatus(id, "confirmed");
+    await sendBookingConfirmation(result.appointment);
+  }
 
   return NextResponse.json({
     success: true,

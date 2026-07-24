@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { isStripeConfigured } from "@/lib/booking/stripe";
 import { markConfirmedBySession } from "@/lib/booking/db";
+import { sendBookingConfirmation } from "@/lib/booking/notify";
 
 export const dynamic = "force-dynamic";
 
@@ -20,5 +21,6 @@ export async function POST(request: NextRequest) {
   }
   const appt = await markConfirmedBySession(session, `dev_pi_${crypto.randomBytes(8).toString("hex")}`);
   if (!appt) return NextResponse.json({ error: "Booking not found" }, { status: 404 });
+  await sendBookingConfirmation(appt);
   return NextResponse.json({ ok: true, confirmationNumber: appt.confirmation_number });
 }
