@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import BookingFlow from "@/components/BookingFlow";
+import StaffBookingFlow from "@/components/booking/StaffBookingFlow";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -22,11 +22,11 @@ export default function BookPage() {
       <p className="kicker">Booking</p>
       <h1 className="type-chapter mt-10 max-w-[13em]">An hour, held for you.</h1>
       <p className="measure mt-8 text-[0.95rem] text-gray">
-        Six small questions, answered at your pace. Nothing is charged online — your visit is
-        settled at the studio.
+        Choose your treatment and your specialist, and reserve the time that suits you. A small
+        deposit holds your appointment and is applied toward your service.
       </p>
-      <div className="mt-20">
-        <BookingFlow />
+      <div className="mt-16">
+        <StaffBookingFlow />
       </div>
     </div>
   );
